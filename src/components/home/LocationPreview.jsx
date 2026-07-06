@@ -23,16 +23,34 @@ const LocationPreview = () => {
                 Located in the heart of Sirohi, our state-of-the-art facility is easily accessible. Drop by for a cup of coffee and let our experts take care of your car.
               </p>
               
-              <div className="bg-background p-6 rounded-xl border border-white/5 mb-8">
+              <div className="bg-background p-6 rounded-xl border border-white/5 mb-8 space-y-6">
                 <div className="flex items-start gap-4">
                   <MapPin className="w-6 h-6 text-primary shrink-0 mt-1" />
                   <div>
-                    <h4 className="text-white font-bold font-heading mb-2">Tirupati Automobiles</h4>
+                    <h4 className="text-white font-bold font-heading mb-1">Workshop Address</h4>
                     <p className="text-gray text-sm leading-relaxed">
+                      Tirupati Automobiles,<br/>
                       RIICO Industrial Area,<br/>
-                      Near Bypass Road,<br/>
-                      Sirohi, Rajasthan 307001
+                      Sirohi, Rajasthan
                     </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-primary shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  <div>
+                    <h4 className="text-white font-bold font-heading mb-1">Phone</h4>
+                    <p className="text-gray text-sm leading-relaxed">+91 98765 43210</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-primary shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <div>
+                    <h4 className="text-white font-bold font-heading mb-1">Business Hours</h4>
+                    <p className="text-gray text-sm leading-relaxed">Mon - Sat: 9:00 AM - 7:00 PM<br/>Sunday: Closed</p>
                   </div>
                 </div>
               </div>

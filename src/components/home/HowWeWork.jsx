@@ -4,7 +4,7 @@ import { CalendarCheck, Search, Wrench, ShieldCheck, Key } from 'lucide-react';
 const steps = [
   {
     icon: CalendarCheck,
-    title: 'Book Service',
+    title: 'Book Appointment',
     description: 'Schedule an appointment online or via call.'
   },
   {
@@ -14,7 +14,7 @@ const steps = [
   },
   {
     icon: Wrench,
-    title: 'Repair',
+    title: 'Repair Work',
     description: 'We fix the issues using genuine parts and advanced tools.'
   },
   {
@@ -24,7 +24,7 @@ const steps = [
   },
   {
     icon: Key,
-    title: 'Delivery',
+    title: 'Vehicle Delivery',
     description: 'Get your car back, clean and ready for the road.'
   }
 ];

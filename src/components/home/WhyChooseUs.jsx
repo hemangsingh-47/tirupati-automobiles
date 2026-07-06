@@ -1,36 +1,36 @@
 import { motion } from 'framer-motion';
-import { Wrench, ShieldCheck, IndianRupee, Clock, Package, ThumbsUp } from 'lucide-react';
+import { Wrench, ShieldCheck, IndianRupee, Car, Package, ThumbsUp } from 'lucide-react';
 
 const features = [
   {
-    icon: Wrench,
-    title: 'Experienced Technicians',
-    description: 'Our certified experts have years of experience handling all major car brands with precision.'
+    icon: Car,
+    title: 'Multi Brand Service',
+    description: 'Expert servicing, diagnostics, and repairs for all major domestic and luxury automobile brands.'
   },
   {
     icon: ShieldCheck,
-    title: 'Insurance Claim Support',
-    description: 'Hassle-free, cashless insurance claim assistance with all leading insurance providers.'
+    title: 'Insurance Claim Assistance',
+    description: '100% cashless facilities and hassle-free insurance claim processing with all leading providers.'
+  },
+  {
+    icon: Package,
+    title: 'Genuine Spare Parts',
+    description: 'We exclusively use 100% genuine OEM spare parts to ensure the longevity and performance of your vehicle.'
+  },
+  {
+    icon: Wrench,
+    title: 'Skilled Technicians',
+    description: 'Our team comprises highly trained and certified mechanics with years of professional experience.'
   },
   {
     icon: IndianRupee,
     title: 'Affordable Pricing',
-    description: 'Premium service quality at highly competitive and transparent prices without hidden charges.'
-  },
-  {
-    icon: Clock,
-    title: 'Fast Turnaround',
-    description: 'We value your time. Our streamlined processes ensure quick delivery of your vehicle.'
-  },
-  {
-    icon: Package,
-    title: 'Genuine Parts',
-    description: 'We use only 100% genuine OEM spare parts to guarantee performance and longevity.'
+    description: 'Premium quality automobile care delivered with transparent, highly competitive pricing.'
   },
   {
     icon: ThumbsUp,
-    title: 'Customer Satisfaction',
-    description: 'A relentless focus on quality to ensure every customer leaves our workshop with a smile.'
+    title: 'Quality Workmanship',
+    description: 'A relentless commitment to precision and perfection in every repair and service we perform.'
   }
 ];
 

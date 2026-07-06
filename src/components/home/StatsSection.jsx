@@ -36,10 +36,10 @@ const AnimatedCounter = ({ end, duration = 2, suffix = '' }) => {
 };
 
 const stats = [
-  { value: 5000, suffix: '+', label: 'Cars Serviced' },
   { value: 10, suffix: '+', label: 'Years Experience' },
+  { value: 5000, suffix: '+', label: 'Cars Serviced' },
   { value: 100, suffix: '%', label: 'Customer Satisfaction' },
-  { value: 25, suffix: '+', label: 'Multi Brand Support' }
+  { value: null, textValue: 'Multi Brand', label: 'Workshop' }
 ];
 
 const StatsSection = () => {
@@ -58,7 +58,11 @@ const StatsSection = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <div className="text-4xl md:text-6xl font-heading font-bold text-primary mb-2">
-                <AnimatedCounter end={stat.value} suffix={stat.suffix} />
+                {stat.value !== null ? (
+                  <AnimatedCounter end={stat.value} suffix={stat.suffix} />
+                ) : (
+                  <span>{stat.textValue}</span>
+                )}
               </div>
               <div className="text-gray font-medium uppercase tracking-wider text-sm md:text-base">
                 {stat.label}

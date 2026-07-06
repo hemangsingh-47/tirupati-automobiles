@@ -30,13 +30,14 @@ const HeroSection = () => {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-5xl md:text-7xl font-heading font-bold text-white mb-4 leading-tight">
-              Tirupati <span className="text-primary">Automobiles</span>
+              Complete Car Care <br className="hidden md:block"/>
+              <span className="text-primary">Solutions</span>
             </h1>
             <h2 className="text-xl md:text-3xl font-heading font-medium text-gray-200 mb-6">
-              Professional Car Care & Insurance Claim Experts
+              Trusted Multi Brand Car Workshop In Sirohi
             </h2>
             <p className="text-lg md:text-xl text-gray mb-10 leading-relaxed max-w-2xl">
-              Experience world-class multi-brand car servicing in Sirohi. From general maintenance to complex accident repairs and hassle-free insurance claims, we deliver trust and excellence in every drive.
+              Professional car care & insurance claim experts. From general maintenance to complex accident repairs, we use genuine parts and skilled technicians to deliver excellence in every journey.
             </p>
           </motion.div>
 

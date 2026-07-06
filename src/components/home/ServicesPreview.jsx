@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Car, Hammer, PaintBucket, FileText, Zap, Battery, ArrowRight } from 'lucide-react';
+import { Car, Hammer, PaintBucket, FileText, Zap, Battery, ArrowRight, Activity, Wrench } from 'lucide-react';
 
 const services = [
   {
@@ -14,24 +14,34 @@ const services = [
     description: 'Expert structural repairs and restoration for vehicles involved in accidents. We bring your car back to its original factory condition.',
   },
   {
+    icon: FileText,
+    title: 'Insurance Claim Assistance',
+    description: 'End-to-end cashless insurance claim assistance. We handle the paperwork and coordination with all major insurance companies.',
+  },
+  {
     icon: PaintBucket,
     title: 'Denting & Painting',
     description: 'Premium paint jobs and dent removals using advanced color matching technology for a flawless, showroom-like finish.',
   },
   {
-    icon: FileText,
-    title: 'Insurance Claim',
-    description: 'End-to-end cashless insurance claim assistance. We handle the paperwork and coordination with all major insurance companies.',
-  },
-  {
     icon: Zap,
-    title: 'Electrical Work',
+    title: 'Electrical Repairs',
     description: 'Advanced diagnostics and repair of complex car electrical systems, wiring, sensors, and modern infotainment units.',
   },
   {
     icon: Battery,
-    title: 'Battery Services',
+    title: 'Battery Service',
     description: 'Battery testing, jump-starts, and replacement with authentic brand warranties to ensure your vehicle never stops.',
+  },
+  {
+    icon: Activity,
+    title: 'Wheel Alignment',
+    description: 'Precision computerized wheel alignment and balancing for safer driving and extended tire life.',
+  },
+  {
+    icon: Wrench,
+    title: 'Body Shop Repairs',
+    description: 'Comprehensive body shop services to fix scratches, bumpers, and extensive body damage with factory-level finish.',
   }
 ];
 
@@ -73,7 +83,7 @@ const ServicesPreview = () => {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, index) => {
             const Icon = service.icon;
             return (
