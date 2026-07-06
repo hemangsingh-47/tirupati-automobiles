@@ -6,6 +6,9 @@ import Services from '../pages/Services';
 import Gallery from '../pages/Gallery';
 import InsuranceClaim from '../pages/InsuranceClaim';
 import Contact from '../pages/Contact';
+import Faq from '../pages/Faq';
+import PrivacyPolicy from '../pages/PrivacyPolicy';
+import Terms from '../pages/Terms';
 import NotFound from '../pages/NotFound';
 
 export const router = createBrowserRouter([
@@ -20,6 +23,9 @@ export const router = createBrowserRouter([
       { path: 'gallery', element: <Gallery /> },
       { path: 'insurance', element: <InsuranceClaim /> },
       { path: 'contact', element: <Contact /> },
+      { path: 'faq', element: <Faq /> },
+      { path: 'privacy-policy', element: <PrivacyPolicy /> },
+      { path: 'terms', element: <Terms /> },
     ],
   },
 ]);
