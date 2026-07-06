@@ -31,7 +31,7 @@ const CtaSection = () => {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
-              to="/contact" 
+              to="/book" 
               className="bg-primary text-background px-8 py-4 rounded-md font-semibold text-lg hover:bg-yellow-500 transition-colors flex items-center justify-center"
             >
               Book Service

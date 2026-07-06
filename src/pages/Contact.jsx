@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import api from '../api/axiosConfig';
 import PageHero from '../components/common/PageHero';
 import SectionHeading from '../components/common/SectionHeading';
 import { motion } from 'framer-motion';
@@ -8,19 +9,24 @@ const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setErrorMsg(null);
+    try {
+      await api.post('/contact', formData);
       setIsSubmitted(true);
       setFormData({ name: '', email: '', phone: '', message: '' });
       setTimeout(() => setIsSubmitted(false), 5000);
-    }, 1500);
+    } catch (error) {
+      setErrorMsg(error.response?.data?.message || 'Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -109,6 +115,15 @@ const Contact = () => {
                     className="mb-6 p-4 bg-green-500/10 border border-green-500/50 rounded-lg text-green-400 font-medium"
                   >
                     Thank you! Your message has been successfully sent. We will contact you shortly.
+                  </motion.div>
+                )}
+                {errorMsg && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400 font-medium"
+                  >
+                    {errorMsg}
                   </motion.div>
                 )}
 
