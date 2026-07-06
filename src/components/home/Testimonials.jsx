@@ -1,28 +1,52 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Star, Quote } from 'lucide-react';
+import { Star, Quote, PlusCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import api from '../../api/axiosConfig';
 
-const testimonials = [
+const defaultTestimonials = [
   {
-    name: 'Rahul Sharma',
+    customerName: 'Rahul Sharma',
     role: 'Audi A6 Owner',
-    content: 'The level of professionalism at Tirupati Automobiles is unmatched. They handled my accident repair seamlessly and the insurance claim was entirely hassle-free. Highly recommended.',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'
+    comment: 'The level of professionalism at Tirupati Automobiles is unmatched. They handled my accident repair seamlessly and the insurance claim was entirely hassle-free. Highly recommended.',
+    rating: 5
   },
   {
-    name: 'Priya Desai',
+    customerName: 'Priya Desai',
     role: 'Hyundai Creta Owner',
-    content: 'I have been bringing my car here for general servicing for two years. The transparent pricing and genuine parts give me peace of mind. The staff is extremely courteous and knowledgeable.',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'
+    comment: 'I have been bringing my car here for general servicing for two years. The transparent pricing and genuine parts give me peace of mind. The staff is extremely courteous and knowledgeable.',
+    rating: 5
   },
   {
-    name: 'Vikram Singh',
+    customerName: 'Vikram Singh',
     role: 'Toyota Fortuner Owner',
-    content: 'Excellent denting and painting work. My Fortuner looks brand new after the paint job. They have state-of-the-art equipment and the turnaround time was surprisingly fast.',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'
+    comment: 'Excellent denting and painting work. My Fortuner looks brand new after the paint job. They have state-of-the-art equipment and the turnaround time was surprisingly fast.',
+    rating: 5
   }
 ];
 
 const Testimonials = () => {
+  const [reviews, setReviews] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const { data } = await api.get('/reviews');
+        if (data && data.length > 0) {
+          setReviews(data);
+        } else {
+          setReviews(defaultTestimonials);
+        }
+      } catch (error) {
+        setReviews(defaultTestimonials);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchReviews();
+  }, []);
+
   return (
     <section className="py-24 bg-surface border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,14 +63,28 @@ const Testimonials = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-heading font-bold text-white"
+            className="text-3xl md:text-5xl font-heading font-bold text-white mb-8"
           >
             What Our Customers Say
           </motion.h2>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <Link 
+              to="/submit-review"
+              className="inline-flex items-center gap-2 bg-primary text-background font-bold px-6 py-3 rounded-lg hover:bg-yellow-500 transition-colors shadow-xl"
+            >
+              <PlusCircle className="w-5 h-5" /> Leave a Review
+            </Link>
+          </motion.div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
+          {reviews.slice(0, 3).map((testimonial, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30 }}
@@ -59,23 +97,24 @@ const Testimonials = () => {
               
               <div className="flex gap-1 mb-6">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} className="w-5 h-5 fill-primary text-primary" />
+                  <Star 
+                    key={star} 
+                    className={`w-5 h-5 ${star <= (testimonial.rating || 5) ? 'fill-primary text-primary' : 'text-gray/30'}`} 
+                  />
                 ))}
               </div>
               
               <p className="text-gray italic leading-relaxed mb-8 relative z-10">
-                "{testimonial.content}"
+                "{testimonial.comment}"
               </p>
               
               <div className="flex items-center gap-4 mt-auto">
-                <img 
-                  src={testimonial.image} 
-                  alt={testimonial.name} 
-                  className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
-                />
+                <div className="w-12 h-12 rounded-full bg-primary/20 border-2 border-primary/50 flex items-center justify-center text-primary font-bold text-xl">
+                  {testimonial.customerName.charAt(0)}
+                </div>
                 <div>
-                  <h4 className="text-white font-bold font-heading">{testimonial.name}</h4>
-                  <p className="text-gray text-sm">{testimonial.role}</p>
+                  <h4 className="text-white font-bold font-heading">{testimonial.customerName}</h4>
+                  {testimonial.role && <p className="text-gray text-sm">{testimonial.role}</p>}
                 </div>
               </div>
             </motion.div>

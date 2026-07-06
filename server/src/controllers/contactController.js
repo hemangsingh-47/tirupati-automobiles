@@ -1,4 +1,6 @@
 import Contact from '../models/Contact.js';
+import ApiResponse from '../utils/ApiResponse.js';
+import AppError from '../utils/AppError.js';
 
 // @desc    Create a new contact message
 // @route   POST /api/contact
@@ -8,8 +10,7 @@ export const createContact = async (req, res, next) => {
     const { name, phone, email, message } = req.body;
 
     if (!name || !phone || !email || !message) {
-      res.status(400);
-      throw new Error('Please fill in all required fields');
+      return next(new AppError('Please fill in all required fields', 400));
     }
 
     const contact = await Contact.create({
@@ -19,7 +20,7 @@ export const createContact = async (req, res, next) => {
       message,
     });
 
-    res.status(201).json(contact);
+    new ApiResponse(201, 'Contact message sent successfully', contact).send(res);
   } catch (error) {
     next(error);
   }
@@ -31,7 +32,7 @@ export const createContact = async (req, res, next) => {
 export const getContacts = async (req, res, next) => {
   try {
     const contacts = await Contact.find({}).sort({ createdAt: -1 });
-    res.json(contacts);
+    new ApiResponse(200, 'Contacts retrieved successfully', contacts).send(res);
   } catch (error) {
     next(error);
   }

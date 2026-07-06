@@ -6,19 +6,20 @@ import {
   updateBookingStatus,
   deleteBooking,
 } from '../controllers/bookingController.js';
+import { protect } from '../middleware/authMiddleware.js';
 import upload from '../middleware/upload.js';
 
 const router = express.Router();
 
 router.route('/')
   .post(upload.array('images', 5), createBooking)
-  .get(getBookings);
+  .get(protect, getBookings);
 
 router.route('/:id')
-  .get(getBookingById)
-  .delete(deleteBooking);
+  .get(protect, getBookingById)
+  .delete(protect, deleteBooking);
 
 router.route('/:id/status')
-  .patch(updateBookingStatus);
+  .patch(protect, updateBookingStatus);
 
 export default router;

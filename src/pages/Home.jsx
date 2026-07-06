@@ -9,18 +9,27 @@ import Testimonials from '../components/home/Testimonials';
 import CtaSection from '../components/home/CtaSection';
 import LocationPreview from '../components/home/LocationPreview';
 import FloatingActions from '../components/FloatingActions';
+import { useCms } from '../context/CmsContext';
 
 const Home = () => {
+  const { content, loading } = useCms();
+
+  if (loading) return null; // or a loader
+
   return (
     <div>
-      <HeroSection />
-      <WhyChooseUs />
-      <ServicesPreview />
+      {content?.showHero !== false && <HeroSection />}
+      {content?.showServices !== false && (
+        <>
+          <WhyChooseUs />
+          <ServicesPreview />
+        </>
+      )}
       <InsuranceBanner />
       <HowWeWork />
-      <StatsSection />
-      <GalleryPreview />
-      <Testimonials />
+      {content?.showStats !== false && <StatsSection />}
+      {content?.showGallery !== false && <GalleryPreview />}
+      {content?.showTestimonials !== false && <Testimonials />}
       <CtaSection />
       <LocationPreview />
       <FloatingActions />

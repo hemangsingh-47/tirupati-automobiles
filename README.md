@@ -1,16 +1,45 @@
-# React + Vite
+# Tirupati Automobiles - CMS & Booking Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A full-stack MERN application for a multi-brand car workshop, featuring a public-facing website with dynamic content, a customer portal for booking and tracking services, and a comprehensive admin dashboard.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Public Website
+- Dynamic Hero, About, and Service sections
+- SEO Optimized with React Helmet Async
+- Contact and Booking forms
+- Reviews showcase
 
-## React Compiler
+### Customer Portal
+- JWT Authentication (Login/Register)
+- Book a new service
+- Track service status and history
+- Real-time notifications on status changes
+- Profile management
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Admin Dashboard (CMS)
+- **Website Content Management**: Update text, taglines, and FAQs dynamically
+- **Service Management**: Add/Edit/Delete services
+- **Booking Management**: Accept, update status, and manage appointments
+- **User & Customer Management**: Manage staff, admins, and registered customers
+- **Gallery & Reviews**: Curate portfolio images and customer feedback
+- **System Settings**: Global configurations and contact details
 
-## Expanding the Oxlint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+**Frontend:** React, Vite, Tailwind CSS, Framer Motion, Axios, React Hook Form, React Helmet Async
+**Backend:** Node.js, Express, MongoDB, Mongoose, JWT, Multer
+**Security:** Helmet, Express-Rate-Limit, Express-Mongo-Sanitize, XSS-Clean
+**Performance:** Compression, PM2 (Production)
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies:
+   - Root: `npm install`
+   - Server: `cd server && npm install`
+3. Create `.env` files in both root and `/server`
+4. Run Development: `npm run dev` in both directories
+
+## Production Deployment
+See `deployment.md` for detailed instructions on deploying to production environments.

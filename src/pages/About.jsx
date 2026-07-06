@@ -4,6 +4,7 @@ import CtaSection from '../components/home/CtaSection';
 import WhyChooseUs from '../components/home/WhyChooseUs';
 import { motion } from 'framer-motion';
 import { Shield, Target } from 'lucide-react';
+import { useCms } from '../context/CmsContext';
 
 const timeline = [
   { year: '2014', title: 'The Beginning', description: 'Started as a small local garage in Sirohi with just two mechanics.' },
@@ -14,6 +15,7 @@ const timeline = [
 ];
 
 const About = () => {
+  const { content, team } = useCms();
   return (
     <main>
       <PageHero 
@@ -27,13 +29,10 @@ const About = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row gap-16 items-center">
             <div className="w-full lg:w-1/2">
-              <SectionHeading subtitle="Our Story" title="A Legacy of Excellence in Automobile Care" />
+              <SectionHeading subtitle="Our Story" title={content?.aboutTitle || "A Legacy of Excellence in Automobile Care"} />
               <div className="text-gray text-lg leading-relaxed space-y-6">
-                <p>
-                  Established in the heart of Sirohi, Tirupati Automobiles has grown from a humble repair shop into a state-of-the-art multi-brand workshop. We built our reputation on a foundation of trust, transparency, and technical superiority.
-                </p>
-                <p>
-                  Our workshop in the RIICO Industrial Area spans over extensive square footage, equipped with the latest diagnostic tools, dedicated paint booths, and structural repair machinery. We believe in providing dealership-quality service without the exorbitant price tags.
+                <p className="whitespace-pre-wrap">
+                  {content?.aboutDescription || "Established in the heart of Sirohi, Tirupati Automobiles has grown from a humble repair shop into a state-of-the-art multi-brand workshop. We built our reputation on a foundation of trust, transparency, and technical superiority."}
                 </p>
               </div>
             </div>
@@ -118,6 +117,46 @@ const About = () => {
           </div>
         </div>
       </section>
+
+      {/* Team Section */}
+      {team && team.length > 0 && (
+        <section className="py-24 bg-surface border-t border-white/5">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <SectionHeading subtitle="Our Experts" title="Meet The Team" centered />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {team.map((member, index) => (
+                <motion.div 
+                  key={member._id || index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="bg-background rounded-2xl overflow-hidden border border-white/5 group"
+                >
+                  <div className="aspect-[3/4] overflow-hidden bg-white/5 relative">
+                    {member.imageUrl ? (
+                      <img 
+                        src={`http://localhost:5000/uploads/${member.imageUrl}`} 
+                        alt={member.name}
+                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray">No Image</div>
+                    )}
+                  </div>
+                  <div className="p-6 text-center">
+                    <h3 className="text-xl font-bold text-white font-heading">{member.name}</h3>
+                    <p className="text-primary font-medium text-sm mb-1">{member.role}</p>
+                    {member.experience && (
+                      <p className="text-xs text-gray">{member.experience} Experience</p>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <WhyChooseUs />
       <CtaSection />

@@ -1,51 +1,16 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Car, Hammer, PaintBucket, FileText, Zap, Battery, ArrowRight, Activity, Wrench } from 'lucide-react';
-
-const services = [
-  {
-    icon: Car,
-    title: 'General Car Service',
-    description: 'Comprehensive regular maintenance including oil changes, filter replacements, and full vehicle checkups to keep your car running smoothly.',
-  },
-  {
-    icon: Hammer,
-    title: 'Accident Repair',
-    description: 'Expert structural repairs and restoration for vehicles involved in accidents. We bring your car back to its original factory condition.',
-  },
-  {
-    icon: FileText,
-    title: 'Insurance Claim Assistance',
-    description: 'End-to-end cashless insurance claim assistance. We handle the paperwork and coordination with all major insurance companies.',
-  },
-  {
-    icon: PaintBucket,
-    title: 'Denting & Painting',
-    description: 'Premium paint jobs and dent removals using advanced color matching technology for a flawless, showroom-like finish.',
-  },
-  {
-    icon: Zap,
-    title: 'Electrical Repairs',
-    description: 'Advanced diagnostics and repair of complex car electrical systems, wiring, sensors, and modern infotainment units.',
-  },
-  {
-    icon: Battery,
-    title: 'Battery Service',
-    description: 'Battery testing, jump-starts, and replacement with authentic brand warranties to ensure your vehicle never stops.',
-  },
-  {
-    icon: Activity,
-    title: 'Wheel Alignment',
-    description: 'Precision computerized wheel alignment and balancing for safer driving and extended tire life.',
-  },
-  {
-    icon: Wrench,
-    title: 'Body Shop Repairs',
-    description: 'Comprehensive body shop services to fix scratches, bumpers, and extensive body damage with factory-level finish.',
-  }
-];
+import * as Icons from 'lucide-react';
+import { useCms } from '../../context/CmsContext';
 
 const ServicesPreview = () => {
+  const { services } = useCms();
+  
+  // Show only featured services, max 8
+  const displayServices = services?.filter(s => s.isFeatured).slice(0, 8) || [];
+
+  if (!displayServices.length) return null;
+
   return (
     <section className="py-24 bg-surface border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -78,14 +43,14 @@ const ServicesPreview = () => {
               className="inline-flex items-center text-primary font-semibold hover:text-yellow-400 transition-colors group"
             >
               View All Services
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              <Icons.ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </Link>
           </motion.div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service, index) => {
-            const Icon = service.icon;
+          {displayServices.map((service, index) => {
+            const Icon = Icons[service.icon] || Icons.Wrench;
             return (
               <motion.div
                 key={index}
@@ -107,14 +72,14 @@ const ServicesPreview = () => {
                     {service.title}
                   </h3>
                   <p className="text-gray mb-6 leading-relaxed line-clamp-3">
-                    {service.description}
+                    {service.shortDescription}
                   </p>
                   <Link 
                     to="/services" 
                     className="inline-flex items-center text-sm font-semibold text-white group-hover:text-primary transition-colors"
                   >
                     Read More
-                    <ArrowRight className="w-4 h-4 ml-1 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    <Icons.ArrowRight className="w-4 h-4 ml-1 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   </Link>
                 </div>
               </motion.div>

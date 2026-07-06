@@ -1,30 +1,41 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PageHero from '../components/common/PageHero';
 import SectionHeading from '../components/common/SectionHeading';
 import CtaSection from '../components/home/CtaSection';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Maximize2, X } from 'lucide-react';
+import { Maximize2, X, RefreshCw } from 'lucide-react';
+import { galleryService } from '../services/gallery.service';
 
-const categories = ['All', 'Workshop', 'Painting', 'Accident Repair', 'Before & After', 'Insurance'];
-
-const galleryImages = [
-  { src: 'https://images.unsplash.com/photo-1625047509168-a7026f36de04?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'Workshop' },
-  { src: 'https://images.unsplash.com/photo-1507560461415-99731cfa81c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'Painting' },
-  { src: 'https://images.unsplash.com/photo-1600661653561-629509216228?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'Accident Repair' },
-  { src: 'https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'Before & After' },
-  { src: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'Insurance' },
-  { src: 'https://images.unsplash.com/photo-1503375894314-46765ff0a8d6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'Workshop' },
-  { src: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'Accident Repair' },
-  { src: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'Workshop' }
-];
+const categories = ['All', 'Workshop', 'Repairs', 'Before/After', 'Events'];
 
 const Gallery = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [lightboxImage, setLightboxImage] = useState(null);
+  
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchImages = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await galleryService.getGallery();
+      setImages(data);
+    } catch (err) {
+      setError('Failed to load gallery images. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
 
   const filteredImages = activeCategory === 'All' 
-    ? galleryImages 
-    : galleryImages.filter(img => img.category === activeCategory);
+    ? images 
+    : images.filter(img => img.category === activeCategory);
 
   return (
     <main>
@@ -55,37 +66,54 @@ const Gallery = () => {
             ))}
           </div>
 
-          {/* Premium Grid */}
-          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <AnimatePresence>
-              {filteredImages.map((image, index) => (
-                <motion.div
-                  key={image.src + index}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.4 }}
-                  className="relative group rounded-2xl overflow-hidden aspect-square cursor-pointer bg-surface border border-white/5"
-                  onClick={() => setLightboxImage(image.src)}
-                >
-                  <img 
-                    src={image.src} 
-                    alt={image.category} 
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-background transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                      <Maximize2 className="w-5 h-5" />
+          {/* State Handling */}
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20">
+              <RefreshCw className="w-8 h-8 text-primary animate-spin mb-4" />
+              <p className="text-gray">Loading gallery...</p>
+            </div>
+          ) : error ? (
+            <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-8 rounded-xl text-center">
+              <p className="mb-4">{error}</p>
+              <button onClick={fetchImages} className="text-primary hover:underline">Retry Loading</button>
+            </div>
+          ) : images.length === 0 ? (
+            <div className="text-center py-20 border border-white/10 rounded-2xl bg-surface/50">
+              <p className="text-gray text-lg">No images available yet.</p>
+            </div>
+          ) : (
+            /* Premium Grid */
+            <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <AnimatePresence>
+                {filteredImages.map((image) => (
+                  <motion.div
+                    key={image._id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.4 }}
+                    className="relative group rounded-2xl overflow-hidden aspect-square cursor-pointer bg-surface border border-white/5"
+                    onClick={() => setLightboxImage(image.imageUrl)}
+                  >
+                    <img 
+                      src={`http://localhost:5000/uploads/${image.imageUrl}`} 
+                      alt={image.title || image.category} 
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
+                      <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-background transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <Maximize2 className="w-5 h-5" />
+                      </div>
                     </div>
-                  </div>
-                  <div className="absolute bottom-4 left-4 bg-background/90 text-white text-xs px-3 py-1 rounded-full font-semibold uppercase tracking-wider shadow-lg">
-                    {image.category}
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+                    <div className="absolute bottom-4 left-4 bg-background/90 text-white text-xs px-3 py-1 rounded-full font-semibold uppercase tracking-wider shadow-lg">
+                      {image.category}
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          )}
         </div>
       </section>
 
@@ -109,7 +137,7 @@ const Gallery = () => {
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
-              src={lightboxImage}
+              src={`http://localhost:5000/uploads/${lightboxImage}`}
               alt="Lightbox"
               className="max-w-full max-h-full rounded-2xl shadow-2xl border border-white/10"
               onClick={(e) => e.stopPropagation()}

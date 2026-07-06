@@ -1,5 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
+import { useCms } from '../../context/CmsContext';
 
 const AnimatedCounter = ({ end, duration = 2, suffix = '' }) => {
   const [count, setCount] = useState(0);
@@ -35,14 +36,24 @@ const AnimatedCounter = ({ end, duration = 2, suffix = '' }) => {
   );
 };
 
-const stats = [
-  { value: 10, suffix: '+', label: 'Years Experience' },
-  { value: 5000, suffix: '+', label: 'Cars Serviced' },
-  { value: 100, suffix: '%', label: 'Customer Satisfaction' },
-  { value: null, textValue: 'Multi Brand', label: 'Workshop' }
-];
+const parseStat = (valueStr) => {
+  const match = valueStr?.match(/^(\d+)(.*)$/);
+  if (match) {
+    return { value: parseInt(match[1], 10), suffix: match[2] };
+  }
+  return { value: null, textValue: valueStr || '' };
+};
 
 const StatsSection = () => {
+  const { content } = useCms();
+
+  const stats = [
+    { ...parseStat(content?.stat1Value || '5000+'), label: content?.stat1Label || 'Happy Customers' },
+    { ...parseStat(content?.stat2Value || '15000+'), label: content?.stat2Label || 'Vehicles Repaired' },
+    { ...parseStat(content?.stat3Value || '10+'), label: content?.stat3Label || 'Years Experience' },
+    { ...parseStat(content?.stat4Value || '15+'), label: content?.stat4Label || 'Expert Mechanics' }
+  ];
+
   return (
     <section className="py-20 bg-surface border-t border-b border-white/5 relative overflow-hidden">
       <div className="absolute inset-0 bg-primary/5"></div>

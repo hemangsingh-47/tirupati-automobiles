@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 
 const bookingSchema = new mongoose.Schema(
   {
+    customerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Customer',
+      default: null, // Allow guest bookings
+    },
     customerName: {
       type: String,
       required: [true, 'Please add your name'],
@@ -55,6 +60,7 @@ const bookingSchema = new mongoose.Schema(
         'Booking Received',
         'Vehicle Received',
         'Inspection',
+        'Waiting For Parts',
         'Repair Started',
         'Painting',
         'Quality Check',
@@ -63,6 +69,14 @@ const bookingSchema = new mongoose.Schema(
       ],
       default: 'Booking Received',
     },
+    statusHistory: [
+      {
+        status: String,
+        updatedBy: String,
+        date: { type: Date, default: Date.now },
+        notes: String
+      }
+    ],
     images: [
       {
         type: String,

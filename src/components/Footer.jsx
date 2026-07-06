@@ -1,7 +1,15 @@
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { useSettings } from '../context/SettingsContext';
 
 const Footer = () => {
+  const { settings } = useSettings();
+
+  const businessName = settings?.businessName || 'Tirupati Automobiles';
+  const nameParts = businessName.split(' ');
+  const firstName = nameParts[0];
+  const secondName = nameParts.slice(1).join(' ');
+
   return (
     <footer className="bg-surface pt-16 pb-8 border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -9,22 +17,28 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <Link to="/" className="flex items-center gap-2 mb-6">
-              <span className="text-2xl font-heading font-bold text-primary">Tirupati</span>
-              <span className="text-2xl font-heading font-bold text-white">Automobiles</span>
+              <span className="text-2xl font-heading font-bold text-primary">{firstName}</span>
+              <span className="text-2xl font-heading font-bold text-white">{secondName}</span>
             </Link>
             <p className="text-gray mb-6 leading-relaxed">
-              Premium multi-brand car service center in Sirohi, Rajasthan. We provide expert repairs, genuine spare parts, and hassle-free insurance claims.
+              {settings?.tagline || 'Premium multi-brand car service center. We provide expert repairs, genuine spare parts, and hassle-free insurance claims.'}
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-gray hover:text-primary hover:bg-white/5 transition-all font-semibold text-sm">
-                FB
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-gray hover:text-primary hover:bg-white/5 transition-all font-semibold text-sm">
-                IG
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-gray hover:text-primary hover:bg-white/5 transition-all font-semibold text-sm">
-                X
-              </a>
+              {settings?.facebook && (
+                <a href={settings.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-gray hover:text-primary hover:bg-white/5 transition-all font-semibold text-sm">
+                  FB
+                </a>
+              )}
+              {settings?.instagram && (
+                <a href={settings.instagram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-gray hover:text-primary hover:bg-white/5 transition-all font-semibold text-sm">
+                  IG
+                </a>
+              )}
+              {settings?.whatsapp && (
+                <a href={`https://wa.me/${settings.whatsapp.replace(/\D/g,'')}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-gray hover:text-primary hover:bg-white/5 transition-all font-semibold text-sm">
+                  WA
+                </a>
+              )}
             </div>
           </div>
 
@@ -64,19 +78,22 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start gap-4">
                 <MapPin className="w-5 h-5 text-primary shrink-0 mt-1" />
-                <span className="text-gray">123, Auto Market, Bypass Road, Sirohi, Rajasthan 307001</span>
+                <span className="text-gray whitespace-pre-line">{settings?.address}</span>
               </li>
               <li className="flex items-center gap-4">
                 <Phone className="w-5 h-5 text-primary shrink-0" />
-                <a href="tel:+919876543210" className="text-gray hover:text-primary transition-colors">+91 98765 43210</a>
+                <a href={`tel:${settings?.phone?.replace(/\s+/g, '')}`} className="text-gray hover:text-primary transition-colors">{settings?.phone}</a>
               </li>
               <li className="flex items-center gap-4">
                 <Mail className="w-5 h-5 text-primary shrink-0" />
-                <a href="mailto:info@tirupatiautomobiles.com" className="text-gray hover:text-primary transition-colors">info@tirupatiautomobiles.com</a>
+                <a href={`mailto:${settings?.email}`} className="text-gray hover:text-primary transition-colors">{settings?.email}</a>
               </li>
               <li className="flex items-start gap-4">
                 <Clock className="w-5 h-5 text-primary shrink-0 mt-1" />
-                <span className="text-gray">Mon - Sat: 9:00 AM - 7:00 PM<br/>Sunday: Closed</span>
+                <span className="text-gray">
+                  Mon - Sat: {settings?.hoursWeekdays}<br/>
+                  Sunday: {settings?.hoursWeekend}
+                </span>
               </li>
             </ul>
           </div>
@@ -85,7 +102,7 @@ const Footer = () => {
         {/* Copyright */}
         <div className="pt-8 border-t border-white/5 text-center flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-gray">
-            &copy; {new Date().getFullYear()} Tirupati Automobiles. All rights reserved.
+            &copy; {new Date().getFullYear()} {businessName}. All rights reserved.
           </p>
           <div className="text-sm text-gray">
             Designed with <span className="text-primary">&hearts;</span> for premium auto care.

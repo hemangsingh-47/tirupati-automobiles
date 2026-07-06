@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Phone, CheckCircle2, MessageCircle } from 'lucide-react';
+import { useSettings } from '../../context/SettingsContext';
+import { useCms } from '../../context/CmsContext';
 
 const trustBadges = [
   'Multi Brand Service',
@@ -10,6 +12,18 @@ const trustBadges = [
 ];
 
 const HeroSection = () => {
+  const { settings } = useSettings();
+  const { content } = useCms();
+  
+  const phone = settings?.phone || '+91 98765 43210';
+  const whatsapp = settings?.whatsapp || '+91 98765 43210';
+  const phoneFormatted = phone.replace(/\s+/g, '');
+  const whatsappFormatted = whatsapp.replace(/\D/g, '');
+
+  const titleParts = (content?.heroTitle || 'Complete Car Care Solutions').split(' ');
+  const lastWord = titleParts.pop();
+  const titleFirstPart = titleParts.join(' ');
+
   return (
     <section className="relative h-screen flex flex-col justify-center overflow-hidden">
       {/* Background Image & Overlay */}
@@ -30,14 +44,14 @@ const HeroSection = () => {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-5xl md:text-7xl font-heading font-bold text-white mb-4 leading-tight">
-              Complete Car Care <br className="hidden md:block"/>
-              <span className="text-primary">Solutions</span>
+              {titleFirstPart} <br className="hidden md:block"/>
+              <span className="text-primary">{lastWord}</span>
             </h1>
             <h2 className="text-xl md:text-3xl font-heading font-medium text-gray-200 mb-6">
-              Trusted Multi Brand Car Workshop In Sirohi
+              {content?.heroSubtitle || 'Trusted Multi Brand Car Workshop In Sirohi'}
             </h2>
             <p className="text-lg md:text-xl text-gray mb-10 leading-relaxed max-w-2xl">
-              Professional car care & insurance claim experts. From general maintenance to complex accident repairs, we use genuine parts and skilled technicians to deliver excellence in every journey.
+              {content?.heroDescription || 'Professional car care & insurance claim experts. From general maintenance to complex accident repairs, we use genuine parts and skilled technicians to deliver excellence in every journey.'}
             </p>
           </motion.div>
 
@@ -49,20 +63,20 @@ const HeroSection = () => {
             className="flex flex-col sm:flex-row gap-4 mb-12"
           >
             <Link 
-              to="/contact" 
+              to="/book" 
               className="bg-primary text-background px-8 py-4 rounded-md font-semibold text-lg hover:bg-yellow-500 transition-colors flex items-center justify-center text-center"
             >
-              Book Service
+              {content?.heroCtaPrimaryText || 'Book Service'}
             </Link>
             <a 
-              href="tel:+919876543210" 
+              href={`tel:${phoneFormatted}`} 
               className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-4 rounded-md font-semibold text-lg hover:bg-white/20 transition-colors flex items-center justify-center text-center"
             >
               <Phone className="w-5 h-5 mr-2" />
-              Call Now
+              {content?.heroCtaSecondaryText || 'Call Now'}
             </a>
             <a 
-              href="https://wa.me/919876543210" 
+              href={`https://wa.me/${whatsappFormatted}`} 
               target="_blank" 
               rel="noopener noreferrer"
               className="bg-[#25D366] text-white px-8 py-4 rounded-md font-semibold text-lg hover:bg-[#128C7E] transition-colors flex items-center justify-center text-center"

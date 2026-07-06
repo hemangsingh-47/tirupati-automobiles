@@ -4,8 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, Upload, X, Send } from 'lucide-react';
 import PageHero from '../components/common/PageHero';
 import SectionHeading from '../components/common/SectionHeading';
-import api from '../api/axiosConfig';
+import { bookingService } from '../services/booking.service';
 import { Link } from 'react-router-dom';
+import { useCustomerAuth } from '../context/CustomerAuthContext';
 
 const services = [
   'General Service', 'Engine Repair', 'Suspension', 'Brake Service',
@@ -15,7 +16,16 @@ const services = [
 ];
 
 const BookService = () => {
-  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  const { customer } = useCustomerAuth();
+  
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+    defaultValues: {
+      customerName: customer?.name || '',
+      email: customer?.email || '',
+      phoneNumber: customer?.phone || '',
+    }
+  });
+  
   const [selectedImages, setSelectedImages] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
@@ -50,11 +60,14 @@ const BookService = () => {
     });
 
     try {
-      // Must explicitly set multipart/form-data for files
-      const response = await api.post('/bookings', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      setSuccessData(response.data);
+      let responseData;
+      if (customer) {
+        responseData = await bookingService.createCustomerBooking(formData);
+      } else {
+        responseData = await bookingService.createBooking(formData);
+      }
+      
+      setSuccessData(responseData);
       reset();
       setSelectedImages([]);
     } catch (error) {
@@ -124,7 +137,8 @@ const BookService = () => {
                         <label className="block text-sm font-medium text-gray mb-2">Full Name *</label>
                         <input 
                           {...register("customerName", { required: "Name is required" })}
-                          className="w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                          readOnly={!!customer}
+                          className={`w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none ${customer ? 'opacity-70 cursor-not-allowed' : ''}`}
                         />
                         {errors.customerName && <p className="text-red-400 text-sm mt-1">{errors.customerName.message}</p>}
                       </div>
@@ -133,7 +147,8 @@ const BookService = () => {
                         <input 
                           type="tel"
                           {...register("phoneNumber", { required: "Phone is required" })}
-                          className="w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                          readOnly={!!customer}
+                          className={`w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none ${customer ? 'opacity-70 cursor-not-allowed' : ''}`}
                         />
                         {errors.phoneNumber && <p className="text-red-400 text-sm mt-1">{errors.phoneNumber.message}</p>}
                       </div>
@@ -142,7 +157,8 @@ const BookService = () => {
                         <input 
                           type="email"
                           {...register("email", { required: "Email is required" })}
-                          className="w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                          readOnly={!!customer}
+                          className={`w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none ${customer ? 'opacity-70 cursor-not-allowed' : ''}`}
                         />
                         {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>}
                       </div>
