@@ -9,13 +9,14 @@ const cleanPhoneNumber = (number) => {
 };
 
 /**
- * Generates an official WhatsApp wa.me URL
+ * Generates an official WhatsApp API URL
  */
 export const getWhatsAppUrl = (number, message = '') => {
   if (!number) return '#';
   const cleanNumber = cleanPhoneNumber(number);
-  const baseUrl = `https://wa.me/${cleanNumber.replace('+', '')}`;
-  return message ? `${baseUrl}?text=${encodeURIComponent(message)}` : baseUrl;
+  const phone = cleanNumber.replace('+', ''); // WhatsApp API expects numbers without +
+  const baseUrl = `https://api.whatsapp.com/send?phone=${phone}`;
+  return message ? `${baseUrl}&text=${encodeURIComponent(message)}` : baseUrl;
 };
 
 /**
