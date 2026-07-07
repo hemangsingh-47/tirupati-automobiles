@@ -4,7 +4,13 @@
 const cleanPhoneNumber = (number) => {
   if (!number) return '';
   const hasPlus = number.startsWith('+');
-  const digitsOnly = number.replace(/\D/g, '');
+  let digitsOnly = number.replace(/\D/g, '');
+  
+  // If it's a standard 10-digit Indian number without country code, automatically add 91
+  if (digitsOnly.length === 10) {
+    digitsOnly = '91' + digitsOnly;
+  }
+  
   return hasPlus ? `+${digitsOnly}` : digitsOnly;
 };
 
