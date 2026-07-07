@@ -10,7 +10,10 @@ const GalleryManager = () => {
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
+  const [editingImageId, setEditingImageId] = useState(null);
 
   // Form State
   const [selectedFile, setSelectedFile] = useState(null);
@@ -91,6 +94,40 @@ const GalleryManager = () => {
     }
   };
 
+  const handleEditClick = (img) => {
+    setEditingImageId(img._id);
+    setTitle(img.title || '');
+    setCategory(img.category || CATEGORIES[0]);
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    if (!editingImageId) return;
+
+    setIsSavingEdit(true);
+    try {
+      const { data } = await api.patch(`/gallery/${editingImageId}`, {
+        title,
+        category
+      });
+      
+      // Update image in state
+      setImages(images.map(img => img._id === editingImageId ? data.data || data : img));
+      setIsEditModalOpen(false);
+      
+      // Reset
+      setEditingImageId(null);
+      setTitle('');
+      setCategory(CATEGORIES[0]);
+    } catch (error) {
+      console.error("Edit failed", error);
+      alert('Failed to update image');
+    } finally {
+      setIsSavingEdit(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-8">
@@ -145,7 +182,13 @@ const GalleryManager = () => {
               </div>
               
               {/* Overlay Actions */}
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4 backdrop-blur-sm">
+                <button 
+                  onClick={() => handleEditClick(img)}
+                  className="flex items-center gap-2 bg-primary text-background px-4 py-2 rounded-lg font-medium hover:bg-yellow-500 transition-colors"
+                >
+                  Edit
+                </button>
                 <button 
                   onClick={() => handleDelete(img._id)}
                   className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors"
@@ -231,6 +274,70 @@ const GalleryManager = () => {
                     className="w-full bg-primary text-background font-bold py-3 rounded-lg hover:bg-yellow-500 transition-colors mt-6 disabled:opacity-50"
                   >
                     {isUploading ? 'Uploading...' : 'Upload Image'}
+                  </button>
+                </form>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Edit Modal */}
+      <AnimatePresence>
+        {isEditModalOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          >
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-surface w-full max-w-md rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+            >
+              <div className="flex justify-between items-center p-6 border-b border-white/10">
+                <h3 className="text-xl font-bold text-white">Edit Image Info</h3>
+                <button onClick={() => {
+                  setIsEditModalOpen(false);
+                  setTitle('');
+                  setCategory(CATEGORIES[0]);
+                }} className="text-gray hover:text-white">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="p-6">
+                <form onSubmit={handleEditSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-sm text-gray mb-1">Title</label>
+                    <input 
+                      type="text" 
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder="e.g. BMW Engine Repair"
+                      className="w-full bg-background border border-white/10 rounded-lg px-4 py-2 text-white focus:border-primary outline-none"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm text-gray mb-1">Category</label>
+                    <select 
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                      className="w-full bg-background border border-white/10 rounded-lg px-4 py-2 text-white focus:border-primary outline-none"
+                    >
+                      {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+
+                  <button 
+                    type="submit"
+                    disabled={isSavingEdit}
+                    className="w-full bg-primary text-background font-bold py-3 rounded-lg hover:bg-yellow-500 transition-colors mt-6 disabled:opacity-50"
+                  >
+                    {isSavingEdit ? 'Saving...' : 'Save Changes'}
                   </button>
                 </form>
               </div>
