@@ -42,6 +42,12 @@ const BookService = () => {
         alert("Maximum 5 images allowed");
         return;
       }
+      // Check file sizes (15MB)
+      const oversizedFiles = filesArray.filter(f => f.size > 15 * 1024 * 1024);
+      if (oversizedFiles.length > 0) {
+        alert("Each image must be less than 15MB");
+        return;
+      }
       setSelectedImages((prev) => [...prev, ...filesArray]);
     }
   };
@@ -300,7 +306,7 @@ const BookService = () => {
                       <label htmlFor="images" className="cursor-pointer flex flex-col items-center">
                         <Upload className="w-10 h-10 text-primary mb-3" />
                         <span className="text-white font-medium mb-1">Click to upload images</span>
-                        <span className="text-gray text-sm">PNG, JPG or WEBP (Max 5MB each)</span>
+                        <span className="text-gray text-sm">PNG, JPG, WEBP or HEIC (Max 15MB each)</span>
                       </label>
                     </div>
 
