@@ -1,0 +1,248 @@
+import { useState } from 'react';
+import { contactService } from '../services/contact.service';
+import PageHero from '../components/common/PageHero';
+import SectionHeading from '../components/common/SectionHeading';
+import { motion } from 'framer-motion';
+import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
+import { useSettings } from '../context/SettingsContext';
+import WhatsAppButton from '../components/common/WhatsAppButton';
+import { getCallUrl } from '../utils/contactUtils';
+
+const Contact = () => {
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const { settings } = useSettings();
+
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setErrorMsg(null);
+    try {
+      await contactService.createContact(formData);
+      setIsSubmitted(true);
+      setFormData({ name: '', email: '', phone: '', message: '' });
+      setTimeout(() => setIsSubmitted(false), 5000);
+    } catch (error) {
+      setErrorMsg(error.response?.data?.message || 'Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <main>
+      <PageHero 
+        title="Contact Us" 
+        description="Have a question or need to book a service? Reach out to our team and we'll get back to you immediately."
+        image="https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-4.0.3&auto=format&fit=crop&w=2073&q=80"
+      />
+
+      <section className="py-24 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row gap-16">
+            {/* Contact Details */}
+            <div className="w-full lg:w-1/3 space-y-10">
+              <div>
+                <SectionHeading subtitle="Get In Touch" title="We're Here For You" />
+                <p className="text-gray leading-relaxed mb-8">
+                  Whether you need a routine checkup or major repairs, our expert team is ready to assist you with transparent advice and premium service.
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                <div className="flex items-start gap-4 p-6 bg-surface border border-white/5 rounded-xl">
+                  <MapPin className="w-6 h-6 text-primary shrink-0 mt-1" />
+                  <div>
+                    <h4 className="text-white font-bold font-heading mb-1">Workshop Address</h4>
+                    <p className="text-gray text-sm leading-relaxed whitespace-pre-line">
+                      {settings?.address || 'Tirupati Automobiles, RIICO Industrial Area, Sirohi, Rajasthan 307001'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-6 bg-surface border border-white/5 rounded-xl">
+                  <Phone className="w-6 h-6 text-primary shrink-0 mt-1" />
+                  <div>
+                    <h4 className="text-white font-bold font-heading mb-1">Phone</h4>
+                    <p className="text-gray text-sm leading-relaxed">
+                      <a href={getCallUrl(settings?.phone)} className="hover:text-primary transition-colors">
+                        {settings?.phone}
+                      </a>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-6 bg-surface border border-white/5 rounded-xl">
+                  <Mail className="w-6 h-6 text-primary shrink-0 mt-1" />
+                  <div>
+                    <h4 className="text-white font-bold font-heading mb-1">Email</h4>
+                    <p className="text-gray text-sm leading-relaxed">
+                      <a href={`mailto:${settings?.email || 'info@tirupatiautomobiles.com'}`} className="hover:text-primary transition-colors">
+                        {settings?.email || 'info@tirupatiautomobiles.com'}
+                      </a>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-6 bg-surface border border-white/5 rounded-xl">
+                  <Clock className="w-6 h-6 text-primary shrink-0 mt-1" />
+                  <div>
+                    <h4 className="text-white font-bold font-heading mb-1">Business Hours</h4>
+                    <p className="text-gray text-sm leading-relaxed">
+                      Mon - Sat: {settings?.hoursWeekdays || '9:00 AM - 7:00 PM'}<br/>
+                      Sunday: {settings?.hoursWeekend || 'Closed'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-4">
+                  <WhatsAppButton text="Chat on WhatsApp" className="px-6 py-3" />
+                </div>
+              </div>
+            </div>
+
+            {/* Contact Form */}
+            <div className="w-full lg:w-2/3">
+              <div className="bg-surface p-8 md:p-12 rounded-2xl border border-white/5 shadow-2xl">
+                <h3 className="text-2xl font-bold font-heading text-white mb-6">Send Us A Message</h3>
+                
+                {isSubmitted && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-6 p-4 bg-green-500/10 border border-green-500/50 rounded-lg text-green-400 font-medium"
+                  >
+                    Thank you! Your message has been successfully sent. We will contact you shortly.
+                  </motion.div>
+                )}
+                {errorMsg && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400 font-medium"
+                  >
+                    {errorMsg}
+                  </motion.div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-medium text-gray mb-2">Full Name</label>
+                      <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        required
+                        value={formData.name}
+                        onChange={handleChange}
+                        className="w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                        placeholder="John Doe"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray mb-2">Phone Number</label>
+                      <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        required
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                        placeholder="+91 98765 43210"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray mb-2">Email Address</label>
+                    <input 
+                      type="email" 
+                      id="email" 
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                      placeholder="john@example.com"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-medium text-gray mb-2">Message</label>
+                    <textarea 
+                      id="message" 
+                      name="message" 
+                      rows="5"
+                      required
+                      value={formData.message}
+                      onChange={handleChange}
+                      className="w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none"
+                      placeholder="How can we help you today?"
+                    ></textarea>
+                  </div>
+                  
+                  <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="w-full bg-primary text-background font-bold text-lg px-8 py-4 rounded-lg hover:bg-yellow-500 transition-colors flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <span className="flex items-center">
+                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-background" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Sending...
+                      </span>
+                    ) : (
+                      <span className="flex items-center">
+                        Send Message
+                        <Send className="w-5 h-5 ml-2" />
+                      </span>
+                    )}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Map Placeholder or iframe */}
+      <section className="h-[500px] w-full relative">
+        {settings?.googleMapsLink ? (
+           <iframe
+             src={settings.googleMapsLink}
+             width="100%"
+             height="100%"
+             style={{ border: 0, filter: 'grayscale(1) invert(0.9) hue-rotate(180deg)' }}
+             allowFullScreen=""
+             loading="lazy"
+             referrerPolicy="no-referrer-when-downgrade"
+           ></iframe>
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-background/50 pointer-events-none z-10"></div>
+            <img 
+              src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" 
+              alt="Map location placeholder" 
+              className="w-full h-full object-cover grayscale opacity-60"
+            />
+            <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+              <div className="bg-background/80 backdrop-blur-sm p-4 rounded-full border border-primary/20 shadow-2xl">
+                <MapPin className="w-10 h-10 text-primary animate-bounce" />
+              </div>
+            </div>
+          </>
+        )}
+      </section>
+    </main>
+  );
+};
+
+export default Contact;

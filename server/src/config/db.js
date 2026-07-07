@@ -3,7 +3,7 @@ import logger from '../utils/logger.js';
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/tirupati_automobiles');
+    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tirupati_automobiles');
     logger.info(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     logger.error(`Error: ${error.message}`);

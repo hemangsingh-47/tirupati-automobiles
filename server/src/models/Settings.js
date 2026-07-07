@@ -12,8 +12,11 @@ const settingsSchema = new mongoose.Schema(
     facebook: { type: String, default: '' },
     instagram: { type: String, default: '' },
     whatsapp: { type: String, default: '' },
+    youtube: { type: String, default: '' },
+    linkedin: { type: String, default: '' },
     googleMapsLink: { type: String, default: '' },
     emergencyNumber: { type: String, default: '' },
+    logo: { type: String, default: '' },
     
     // SEO Settings
     metaTitle: { type: String, default: 'Tirupati Automobiles - Professional Car Care' },

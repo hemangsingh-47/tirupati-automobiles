@@ -19,6 +19,10 @@ const websiteContentSchema = new mongoose.Schema(
       default: 'Established in the heart of Sirohi, Tirupati Automobiles has grown from a humble repair shop into a state-of-the-art multi-brand workshop. We built our reputation on a foundation of trust, transparency, and technical superiority.' 
     },
     
+    // Insurance Section
+    insuranceTitle: { type: String, default: 'Insurance Partners' },
+    insuranceDescription: { type: String, default: 'We work with top insurance companies...' },
+    
     // Statistics Section
     stat1Label: { type: String, default: 'Happy Customers' },
     stat1Value: { type: String, default: '5000+' },

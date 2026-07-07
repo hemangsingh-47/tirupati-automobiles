@@ -12,6 +12,16 @@ dist
 dist-ssr
 *.local
 
+# Environment Variables (NEVER commit these)
+.env
+.env.local
+.env.production
+server/.env
+
+# Uploads (user-generated content)
+server/uploads/*
+!server/uploads/.gitkeep
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +32,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Audit reports
+rc_audit_report.md

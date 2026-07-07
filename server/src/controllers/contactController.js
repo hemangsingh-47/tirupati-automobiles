@@ -1,6 +1,7 @@
 import Contact from '../models/Contact.js';
 import ApiResponse from '../utils/ApiResponse.js';
 import AppError from '../utils/AppError.js';
+import { sendContactThankYou } from '../services/email.service.js';
 
 // @desc    Create a new contact message
 // @route   POST /api/contact
@@ -19,6 +20,9 @@ export const createContact = async (req, res, next) => {
       email,
       message,
     });
+
+    // Send Thank You email to Customer
+    await sendContactThankYou(email, { name });
 
     new ApiResponse(201, 'Contact message sent successfully', contact).send(res);
   } catch (error) {

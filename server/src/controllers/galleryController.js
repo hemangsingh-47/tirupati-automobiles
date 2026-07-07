@@ -1,6 +1,8 @@
 import Gallery from '../models/Gallery.js';
 import ApiResponse from '../utils/ApiResponse.js';
 import AppError from '../utils/AppError.js';
+import { uploadImage, deleteImage } from '../utils/cloudinary.js';
+import fs from 'fs';
 
 // @desc    Get all gallery images
 // @route   GET /api/gallery
@@ -25,8 +27,11 @@ export const addGalleryImage = async (req, res, next) => {
       return next(new AppError('Please upload an image', 400));
     }
 
+    const imageUrl = await uploadImage(req.file.path);
+    fs.unlinkSync(req.file.path);
+
     const image = await Gallery.create({
-      imageUrl: req.file.filename,
+      imageUrl,
       title,
       category
     });
@@ -67,6 +72,11 @@ export const deleteGalleryImage = async (req, res, next) => {
     const image = await Gallery.findById(req.params.id);
     if (!image) {
       return next(new AppError('Image not found', 404));
+    }
+    
+    // Delete from cloudinary
+    if (image.imageUrl) {
+      await deleteImage(image.imageUrl);
     }
     
     await image.deleteOne();

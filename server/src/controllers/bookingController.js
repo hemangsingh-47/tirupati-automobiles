@@ -2,6 +2,10 @@ import Booking from '../models/Booking.js';
 import Customer from '../models/Customer.js';
 import ApiResponse from '../utils/ApiResponse.js';
 import AppError from '../utils/AppError.js';
+import { uploadImage } from '../utils/cloudinary.js';
+import Settings from '../models/Settings.js';
+import { sendBookingConfirmation, sendAdminNotification, sendVehicleReadyNotification } from '../services/email.service.js';
+import fs from 'fs';
 
 // @desc    Create new booking
 // @route   POST /api/bookings
@@ -23,7 +27,15 @@ export const createBooking = async (req, res, next) => {
       preferredTime,
     } = req.body;
 
-    const images = req.files ? req.files.map(file => file.filename) : [];
+    let imageUrls = [];
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const url = await uploadImage(file.path);
+        imageUrls.push(url);
+        // Optionally delete the local file
+        fs.unlinkSync(file.path);
+      }
+    }
 
     const booking = await Booking.create({
       customerName,
@@ -38,12 +50,46 @@ export const createBooking = async (req, res, next) => {
       problemDescription,
       preferredDate,
       preferredTime,
-      images,
+      images: imageUrls,
       statusHistory: [{
         status: 'Booking Received',
         updatedBy: 'System',
         notes: 'Booking submitted successfully'
       }]
+    });
+
+    // Fetch settings to get workshop contact number
+    let settings = await Settings.findOne();
+    const workshopContactNumber = settings?.phone || '+91 98765 43210';
+    const adminEmail = settings?.email || process.env.EMAIL_FROM || 'admin@tirupatiautomobiles.com';
+
+    // Send email to Customer
+    if (email) {
+      await sendBookingConfirmation(email, {
+        customerName,
+        bookingId: booking._id,
+        carBrand,
+        carModel,
+        registrationNumber,
+        serviceType,
+        preferredDate,
+        preferredTime,
+        workshopContactNumber
+      });
+    }
+
+    // Send email to Admin
+    await sendAdminNotification(adminEmail, {
+      customerName,
+      phone: phoneNumber,
+      carBrand,
+      carModel,
+      registrationNumber,
+      serviceType,
+      problemDescription,
+      bookingId: booking._id,
+      preferredDate,
+      preferredTime
     });
 
     new ApiResponse(201, 'Booking created successfully', booking).send(res);
@@ -152,6 +198,19 @@ export const updateBookingStatus = async (req, res, next) => {
         });
         await customer.save();
       }
+    }
+
+    // Send Vehicle Ready Email
+    if (status === 'Ready For Delivery' && booking.email) {
+      let settings = await Settings.findOne();
+      const workshopContactNumber = settings?.phone || '+91 98765 43210';
+      await sendVehicleReadyNotification(booking.email, {
+        customerName: booking.customerName,
+        carBrand: booking.carBrand,
+        carModel: booking.carModel,
+        registrationNumber: booking.registrationNumber,
+        workshopContactNumber
+      });
     }
 
     new ApiResponse(200, 'Booking status updated successfully', updatedBooking).send(res);

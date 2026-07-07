@@ -1,5 +1,7 @@
 import Settings from '../models/Settings.js';
 import ApiResponse from '../utils/ApiResponse.js';
+import { uploadImage, deleteImage } from '../utils/cloudinary.js';
+import fs from 'fs';
 
 // @desc    Get settings
 // @route   GET /api/settings
@@ -33,7 +35,8 @@ export const updateSettings = async (req, res, next) => {
     // Update fields dynamically based on request body
     const fields = [
       'businessName', 'tagline', 'phone', 'email', 'address', 
-      'hoursWeekdays', 'hoursWeekend', 'facebook', 'instagram', 'whatsapp', 'googleMapsLink'
+      'hoursWeekdays', 'hoursWeekend', 'facebook', 'instagram', 
+      'whatsapp', 'youtube', 'linkedin', 'googleMapsLink', 'emergencyNumber'
     ];
 
     fields.forEach(field => {
@@ -41,6 +44,15 @@ export const updateSettings = async (req, res, next) => {
         settings[field] = req.body[field];
       }
     });
+
+    if (req.file) {
+      if (settings.logo) {
+        await deleteImage(settings.logo);
+      }
+      const logoUrl = await uploadImage(req.file.path);
+      settings.logo = logoUrl;
+      fs.unlinkSync(req.file.path);
+    }
 
     const updatedSettings = await settings.save();
     new ApiResponse(200, 'Settings updated successfully', updatedSettings).send(res);

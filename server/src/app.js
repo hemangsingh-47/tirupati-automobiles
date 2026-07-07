@@ -4,6 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import rateLimit from 'express-rate-limit';
 import compression from 'compression';
 
@@ -23,15 +24,24 @@ import teamRoutes from './routes/teamRoutes.js';
 import faqRoutes from './routes/faqRoutes.js';
 import customerAuthRoutes from './routes/customerAuthRoutes.js';
 import customerBookingRoutes from './routes/customerBookingRoutes.js';
+import insuranceRoutes from './routes/insuranceRoutes.js';
 
 dotenv.config();
 
 const app = express();
 
+// Trust proxy for rate limiter (needed when behind Vite proxy or Nginx)
+app.set('trust proxy', 1);
+
 app.use(helmet({
   crossOriginResourcePolicy: false,
 }));
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL 
+    ? [process.env.FRONTEND_URL, 'http://localhost:5173', 'http://localhost:5174'] 
+    : '*',
+  credentials: true,
+}));
 
 const morganFormat = process.env.NODE_ENV !== 'production' ? 'dev' : 'combined';
 app.use(
@@ -57,8 +67,9 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-const __dirname = path.resolve();
-app.use('/uploads', express.static(path.join(__dirname, 'server/uploads')));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/contact', contactRoutes);
@@ -70,12 +81,18 @@ app.use('/api/settings', settingsRoutes);
 app.use('/api/content', contentRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/team', teamRoutes);
-app.use('/api/faq', faqRoutes);
+app.use('/api/faqs', faqRoutes);
+app.use('/api/insurance', insuranceRoutes);
 app.use('/api/customers/auth', customerAuthRoutes);
 app.use('/api/customers/bookings', customerBookingRoutes);
 
 app.get('/', (req, res) => {
   res.send('Tirupati Automobiles API is running...');
+});
+
+// Health check for Render
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
 // Handle 404 errors for unknown routes

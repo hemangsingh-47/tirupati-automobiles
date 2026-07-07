@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /staff/
+Disallow: /customer/
+
+Sitemap: https://tirupatiautomobiles.com/sitemap.xml

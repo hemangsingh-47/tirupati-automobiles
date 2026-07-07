@@ -28,7 +28,7 @@ export const errorHandler = (err, req, res, next) => {
     error = new AppError(message, 400);
   }
 
-  const statusCode = error.statusCode || res.statusCode === 200 ? 500 : res.statusCode;
+  const statusCode = error.statusCode || (res.statusCode === 200 ? 500 : res.statusCode);
 
   // Log the error
   logger.error(`${statusCode} - ${error.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);

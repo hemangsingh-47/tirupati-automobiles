@@ -1,6 +1,7 @@
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import AppError from '../utils/AppError.js';
 
 // Ensure uploads directory exists
 const uploadDir = 'server/uploads/';
@@ -28,7 +29,7 @@ function checkFileType(file, cb) {
   if (extname && mimetype) {
     return cb(null, true);
   } else {
-    cb('Images only!');
+    cb(new AppError('Images only!', 400));
   }
 }
 
