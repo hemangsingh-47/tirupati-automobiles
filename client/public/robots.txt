@@ -4,4 +4,4 @@ Disallow: /admin/
 Disallow: /staff/
 Disallow: /customer/
 
-Sitemap: https://tirupatiautomobiles.com/sitemap.xml
+Sitemap: https://tirupati-automobiles.vercel.app/sitemap.xml
