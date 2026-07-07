@@ -12,11 +12,13 @@ export const getTeam = async (req, res, next) => {
   }
 };
 
+import { uploadImage } from '../utils/cloudinary.js';
+
 export const createTeamMember = async (req, res, next) => {
   try {
     const data = { ...req.body };
     if (req.file) {
-      data.imageUrl = req.file.filename;
+      data.imageUrl = await uploadImage(req.file.path);
     }
     const member = await TeamMember.create(data);
     new ApiResponse(201, 'Team member created successfully', member).send(res);
@@ -29,7 +31,7 @@ export const updateTeamMember = async (req, res, next) => {
   try {
     const data = { ...req.body };
     if (req.file) {
-      data.imageUrl = req.file.filename;
+      data.imageUrl = await uploadImage(req.file.path);
     }
     const member = await TeamMember.findByIdAndUpdate(req.params.id, data, { new: true, runValidators: true });
     if (!member) {

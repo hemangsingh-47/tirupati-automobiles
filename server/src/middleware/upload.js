@@ -4,7 +4,7 @@ import fs from 'fs';
 import AppError from '../utils/AppError.js';
 
 // Ensure uploads directory exists
-const uploadDir = 'server/uploads/';
+const uploadDir = path.join(process.cwd(), 'uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
