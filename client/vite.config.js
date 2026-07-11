@@ -7,13 +7,24 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
     target: 'esnext',
-    minify: 'esbuild',
     cssCodeSplit: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom', 'react-helmet-async'],
-          ui: ['framer-motion', 'lucide-react'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (
+              id.includes('/react/') ||
+              id.includes('/react-dom/') ||
+              id.includes('/react-router-dom/') ||
+              id.includes('/react-helmet-async/') ||
+              id.includes('react')
+            ) {
+              return 'vendor';
+            }
+            if (id.includes('/framer-motion/') || id.includes('/lucide-react/')) {
+              return 'ui';
+            }
+          }
         },
       },
     },
