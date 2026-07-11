@@ -51,7 +51,7 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-surface py-4 shadow-lg border-b border-white/5' : 'bg-transparent py-6'
+        isScrolled ? 'bg-surface py-4 md:py-5 shadow-lg border-b border-white/5' : 'bg-transparent py-5 md:py-8'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -59,10 +59,10 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 shrink-0">
             {settings?.logo ? (
-              <img src={settings.logo} alt={settings.businessName || 'Tirupati Automobiles'} className="h-10 object-contain" />
+              <img src={settings.logo} alt={settings.businessName || 'Tirupati Automobiles'} className="h-10 md:h-14 lg:h-16 object-contain transition-all" />
             ) : (
-              <div className="flex items-center gap-3">
-                <img src="/logo.png" alt="Tirupati Automobiles" className="h-12 md:h-14 object-contain bg-white rounded-lg px-2 py-1" />
+              <div className="flex items-center gap-2 md:gap-3">
+                <img src="/logo.png" alt="Tirupati Automobiles" className="h-10 md:h-14 lg:h-16 object-contain bg-white rounded-lg px-2 py-1 transition-all" />
                 <div className="hidden sm:flex items-baseline gap-1">
                   <span className="text-xl font-heading font-bold text-primary">{firstName}</span>
                   <span className="text-xl font-heading font-bold text-white">{secondName}</span>
@@ -254,10 +254,10 @@ const Navbar = () => {
 
               <div className="pt-4 flex flex-col space-y-3">
                 <div className="grid grid-cols-2 gap-3 mb-2">
-                  <CallButton className="w-full py-3" />
-                  <WhatsAppButton className="w-full py-3" />
+                  <CallButton className="w-full py-4 min-h-[48px]" />
+                  <WhatsAppButton className="w-full py-4 min-h-[48px]" />
                 </div>
-                <Link to="/book" className="w-full text-center bg-primary text-background px-3 py-3 rounded-md text-base font-semibold hover:bg-yellow-500 transition-colors">
+                <Link to="/book" className="w-full text-center bg-primary text-background px-4 py-4 rounded-md text-base font-semibold hover:bg-yellow-500 transition-colors min-h-[48px] flex items-center justify-center">
                   Book Service
                 </Link>
               </div>

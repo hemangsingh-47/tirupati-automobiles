@@ -12,9 +12,8 @@ import FloatingActions from '../components/FloatingActions';
 import { useCms } from '../context/CmsContext';
 
 const Home = () => {
-  const { content, loading } = useCms();
+  const { content } = useCms();
 
-  if (loading) return null; // or a loader
 
   return (
     <div>

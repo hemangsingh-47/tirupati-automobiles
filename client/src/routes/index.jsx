@@ -14,7 +14,7 @@ const PageLoader = () => (
 );
 
 // Lazy Load Public Pages
-const Home = lazy(() => import('../pages/Home'));
+import Home from '../pages/Home';
 const About = lazy(() => import('../pages/About'));
 const Services = lazy(() => import('../pages/Services'));
 const Gallery = lazy(() => import('../pages/Gallery'));
@@ -72,7 +72,7 @@ export const router = createBrowserRouter([
       </Suspense>
     ),
     children: [
-      { index: true, element: <Suspense fallback={<PageLoader />}><Home /></Suspense> },
+      { index: true, element: <Home /> },
       { path: 'about', element: <Suspense fallback={<PageLoader />}><About /></Suspense> },
       { path: 'services', element: <Suspense fallback={<PageLoader />}><Services /></Suspense> },
       { path: 'gallery', element: <Suspense fallback={<PageLoader />}><Gallery /></Suspense> },
