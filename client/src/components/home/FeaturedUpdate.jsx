@@ -59,7 +59,12 @@ const FeaturedUpdate = () => {
             </div>
 
             {/* Thumbnail */}
-            <div className="w-full sm:w-32 h-32 rounded-xl overflow-hidden shrink-0 border border-white/10 bg-surface/50 relative">
+            <a 
+              href={featuredItem.fileType === 'pdf' ? featuredItem.pdfUrl : featuredItem.imageUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full sm:w-32 h-32 rounded-xl overflow-hidden shrink-0 border border-white/10 bg-surface/50 relative cursor-pointer"
+            >
               {featuredItem.fileType === 'pdf' ? (
                 <div className="w-full h-full flex flex-col items-center justify-center">
                   <FileText className="w-10 h-10 text-primary mb-1" />
@@ -72,7 +77,7 @@ const FeaturedUpdate = () => {
                   className="w-full h-full object-cover"
                 />
               )}
-            </div>
+            </a>
 
             {/* Content */}
             <div className="flex-1 text-center sm:text-left pt-2 sm:pt-0 pr-6">
@@ -83,7 +88,7 @@ const FeaturedUpdate = () => {
                 {featuredItem.title}
               </h3>
               <p className="text-gray text-sm line-clamp-2 mb-4">
-                {featuredItem.description || 'Check out our latest update in the Media Center!'}
+                {featuredItem.description || 'Check out our latest update in the Knowledge Section!'}
               </p>
               
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3">
@@ -93,14 +98,8 @@ const FeaturedUpdate = () => {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-surface hover:bg-white/10 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm border border-white/5"
                 >
-                  <Eye className="w-4 h-4" /> Preview
+                  <Eye className="w-4 h-4" /> Open
                 </a>
-                <button 
-                  onClick={handleDownload}
-                  className="flex items-center gap-2 bg-primary hover:bg-yellow-500 text-black px-4 py-2 rounded-lg font-bold transition-colors text-sm"
-                >
-                  <Download className="w-4 h-4" /> Download
-                </button>
               </div>
             </div>
           </div>

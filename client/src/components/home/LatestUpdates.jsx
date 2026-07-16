@@ -81,7 +81,12 @@ const LatestUpdates = () => {
               transition={{ delay: index * 0.1 }}
               className="bg-background rounded-2xl border border-white/10 overflow-hidden group hover:border-primary/50 transition-colors flex flex-col"
             >
-              <div className="relative h-48 bg-surface/50 overflow-hidden">
+              <a 
+                href={item.fileType === 'pdf' ? item.pdfUrl : item.imageUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative block h-48 bg-surface/50 overflow-hidden cursor-pointer"
+              >
                 {item.fileType === 'pdf' ? (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-surface to-background">
                     <FileText className="w-16 h-16 text-primary opacity-80 group-hover:scale-110 transition-transform duration-500" />
@@ -103,7 +108,7 @@ const LatestUpdates = () => {
                     <Pin className="w-4 h-4" />
                   </div>
                 )}
-              </div>
+              </a>
 
               <div className="p-6 flex flex-col flex-1">
                 <div className="flex items-center gap-2 text-xs text-gray mb-3">
@@ -116,24 +121,18 @@ const LatestUpdates = () => {
                 </h3>
                 
                 <p className="text-gray text-sm line-clamp-2 mb-6 flex-1">
-                  {item.description || 'View details in the media center.'}
+                  {item.description || 'View details in the Knowledge Section.'}
                 </p>
                 
-                <div className="grid grid-cols-2 gap-3 mt-auto">
+                <div className="flex flex-col mt-auto">
                   <a 
                     href={item.fileType === 'pdf' ? item.pdfUrl : item.imageUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 bg-surface hover:bg-white/10 text-white py-2.5 rounded-xl font-medium transition-colors text-sm"
+                    className="flex items-center justify-center gap-2 w-full bg-surface hover:bg-white/10 text-white py-2.5 rounded-xl font-medium transition-colors text-sm"
                   >
-                    <Eye className="w-4 h-4" /> Preview
+                    <Eye className="w-4 h-4" /> Open
                   </a>
-                  <button 
-                    onClick={() => handleDownload(item._id, item.fileType === 'pdf' ? item.pdfUrl : item.imageUrl)}
-                    className="flex items-center justify-center gap-2 bg-primary hover:bg-yellow-500 text-black py-2.5 rounded-xl font-bold transition-colors text-sm"
-                  >
-                    <Download className="w-4 h-4" /> Download
-                  </button>
                 </div>
               </div>
             </motion.div>

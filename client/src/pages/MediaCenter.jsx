@@ -73,7 +73,7 @@ const MediaCenter = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-5xl font-heading font-bold text-white mb-4"
           >
-            Media <span className="text-primary">Center</span> & Notice Board
+            Knowledge <span className="text-primary">Section</span>
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0 }}
@@ -174,7 +174,12 @@ const MediaCenter = () => {
                   transition={{ duration: 0.3, delay: index * 0.05 }}
                   className="bg-surface/40 border border-white/10 rounded-2xl overflow-hidden hover:border-primary/50 transition-colors group flex flex-col h-full"
                 >
-                  <div className="relative h-48 bg-background/50 flex items-center justify-center overflow-hidden">
+                  <a 
+                    href={item.fileType === 'pdf' ? item.pdfUrl : item.imageUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative block h-48 bg-background/50 flex items-center justify-center overflow-hidden cursor-pointer"
+                  >
                     {item.fileType === 'pdf' ? (
                       <div className="text-center p-6 w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-surface to-background">
                         <FileText className="w-16 h-16 text-primary mx-auto mb-3 opacity-80 group-hover:scale-110 transition-transform duration-500" />
@@ -198,7 +203,7 @@ const MediaCenter = () => {
                         </span>
                       )}
                     </div>
-                  </div>
+                  </a>
 
                   <div className="p-5 flex flex-col flex-1">
                     <h3 className="text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
@@ -208,32 +213,22 @@ const MediaCenter = () => {
                       {item.description || 'No description provided.'}
                     </p>
                     
-                    <div className="flex items-center justify-between text-xs text-gray mb-5 pb-4 border-b border-white/10">
+                    <div className="flex items-center text-xs text-gray mb-5 pb-4 border-b border-white/10">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-4 h-4 text-primary/70" />
                         {new Date(item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                       </span>
-                      <span className="flex items-center gap-1">
-                        <Download className="w-4 h-4 text-primary/70" />
-                        {item.downloadCount}
-                      </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3 mt-auto">
+                    <div className="flex flex-col mt-auto">
                       <a 
                         href={item.fileType === 'pdf' ? item.pdfUrl : item.imageUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white py-2.5 rounded-xl font-medium transition-colors text-sm"
+                        className="flex items-center justify-center gap-2 w-full bg-white/5 hover:bg-white/10 text-white py-2.5 rounded-xl font-medium transition-colors text-sm"
                       >
-                        <Eye className="w-4 h-4" /> Preview
+                        <Eye className="w-4 h-4" /> Open
                       </a>
-                      <button 
-                        onClick={() => handleDownloadClick(item._id, item.fileType === 'pdf' ? item.pdfUrl : item.imageUrl)}
-                        className="flex items-center justify-center gap-2 bg-primary hover:bg-yellow-500 text-black py-2.5 rounded-xl font-bold transition-colors text-sm"
-                      >
-                        <Download className="w-4 h-4" /> Download
-                      </button>
                     </div>
                   </div>
                 </motion.div>
