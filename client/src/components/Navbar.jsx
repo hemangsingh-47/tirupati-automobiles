@@ -23,6 +23,7 @@ const Navbar = () => {
     { name: 'About', path: '/about' },
     { name: 'Services', path: '/services' },
     { name: 'Gallery', path: '/gallery' },
+    { name: 'Media', path: '/media' },
     { name: 'Insurance Claim', path: '/insurance' },
     { name: 'Contact', path: '/contact' },
   ];
@@ -55,146 +56,146 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 shrink-0">
-            {settings?.logo ? (
-              <img src={settings.logo} alt={settings.businessName || 'Tirupati Automobiles'} className="h-10 md:h-14 lg:h-16 object-contain transition-all" />
-            ) : (
-              <div className="flex items-center gap-2 md:gap-3">
-                <img src="/logo.png" alt="Tirupati Automobiles" className="h-10 md:h-14 lg:h-16 object-contain bg-white rounded-lg px-2 py-1 transition-all" />
-                <div className="hidden sm:flex items-baseline gap-1">
-                  <span className="text-xl font-heading font-bold text-primary">{firstName}</span>
-                  <span className="text-xl font-heading font-bold text-white">{secondName}</span>
+        <div className="flex justify-between items-center w-full gap-4 xl:gap-8">
+          {/* Left: Logo & Brand */}
+          <div className="flex items-center shrink-0">
+            <Link to="/" className="flex items-center gap-2">
+              {settings?.logo ? (
+                <img src={settings.logo} alt={settings.businessName || 'Tirupati Automobiles'} className="h-10 md:h-12 lg:h-14 object-contain transition-all" />
+              ) : (
+                <div className="flex items-center gap-2 md:gap-3">
+                  <img src="/logo.png" alt="Tirupati Automobiles" className="h-10 md:h-12 lg:h-14 object-contain bg-white rounded-lg px-2 py-1 transition-all" />
+                  <div className="hidden sm:flex items-baseline gap-1">
+                    <span className="text-xl font-heading font-bold text-primary">{firstName}</span>
+                    <span className="text-xl font-heading font-bold text-white">{secondName}</span>
+                  </div>
                 </div>
-              </div>
-            )}
-          </Link>
+              )}
+            </Link>
+          </div>
 
-          {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
-            <div className="flex space-x-4 xl:space-x-6 items-center">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  className={`text-sm font-medium transition-colors hover:text-primary ${
-                    location.pathname === link.path ? 'text-primary' : 'text-gray'
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              ))}
-              
-            </div>
-            
-            <div className="flex items-center space-x-4 xl:space-x-6">
-              {/* Customer Portal Dropdown */}
-              <div className="relative group">
-                <button 
-                  onClick={() => {
-                    setIsCustomerMenuOpen(!isCustomerMenuOpen);
-                    setIsAdminMenuOpen(false);
-                  }}
-                  className="flex items-center gap-1 text-sm font-medium text-gray hover:text-primary transition-colors"
-                >
-                  <UserIcon className="w-4 h-4" />
-                  Customer
-                </button>
-                
-                <AnimatePresence>
-                  {isCustomerMenuOpen && (
-                    <motion.div 
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      className="absolute right-0 mt-2 w-48 bg-surface border border-white/10 rounded-xl shadow-2xl py-2 overflow-hidden z-50"
-                    >
-                      {customer ? (
-                        <Link 
-                          to="/customer/dashboard"
-                          className="block px-4 py-2 text-sm text-gray hover:bg-white/5 hover:text-primary transition-colors"
-                        >
-                          My Dashboard
-                        </Link>
-                      ) : (
-                        <>
-                          <Link 
-                            to="/customer/login"
-                            className="block px-4 py-2 text-sm text-gray hover:bg-white/5 hover:text-primary transition-colors"
-                          >
-                            <span className="flex items-center gap-2"><UserIcon className="w-4 h-4"/> Login</span>
-                          </Link>
-                          <Link 
-                            to="/customer/register"
-                            className="block px-4 py-2 text-sm text-gray hover:bg-white/5 hover:text-primary transition-colors"
-                          >
-                            <span className="flex items-center gap-2"><UserIcon className="w-4 h-4"/> Register</span>
-                          </Link>
-                        </>
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Admin Portal Dropdown */}
-              <div className="relative group">
-                <button 
-                  onClick={() => {
-                    setIsAdminMenuOpen(!isAdminMenuOpen);
-                    setIsCustomerMenuOpen(false);
-                  }}
-                  className="flex items-center gap-1 text-sm font-medium text-gray hover:text-primary transition-colors"
-                >
-                  <Shield className="w-4 h-4" />
-                  Admin
-                </button>
-                
-                <AnimatePresence>
-                  {isAdminMenuOpen && (
-                    <motion.div 
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      className="absolute right-0 mt-2 w-48 bg-surface border border-white/10 rounded-xl shadow-2xl py-2 overflow-hidden z-50"
-                    >
-                      {user ? (
-                        <Link 
-                          to={`/${user.role}/dashboard`}
-                          className="block px-4 py-2 text-sm text-gray hover:bg-white/5 hover:text-primary transition-colors"
-                        >
-                          Go to Dashboard
-                        </Link>
-                      ) : (
-                        <>
-                          <Link 
-                            to="/admin/login"
-                            className="block px-4 py-2 text-sm text-gray hover:bg-white/5 hover:text-primary transition-colors"
-                          >
-                            <span className="flex items-center gap-2"><Shield className="w-4 h-4"/> Admin Login</span>
-                          </Link>
-                          <Link 
-                            to="/staff/login"
-                            className="block px-4 py-2 text-sm text-gray hover:bg-white/5 hover:text-primary transition-colors"
-                          >
-                            <span className="flex items-center gap-2"><UserIcon className="w-4 h-4"/> Staff Login</span>
-                          </Link>
-                        </>
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <Link to="/book" className="bg-primary text-background px-4 lg:px-5 py-2 rounded-md font-semibold hover:bg-yellow-500 transition-colors whitespace-nowrap">
-                Book Service
+          {/* Center: Navigation Links */}
+          <div className="hidden lg:flex flex-1 justify-center items-center gap-4 xl:gap-8 px-2">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.path}
+                className={`text-sm font-medium whitespace-nowrap transition-colors hover:text-primary flex items-center h-10 ${
+                  location.pathname === link.path ? 'text-primary' : 'text-gray'
+                }`}
+              >
+                {link.name}
               </Link>
+            ))}
+          </div>
+            
+          {/* Right: Actions */}
+          <div className="hidden lg:flex items-center justify-end gap-4 xl:gap-6 shrink-0">
+            {/* Customer Portal Dropdown */}
+            <div className="relative group flex items-center h-10">
+              <button 
+                onClick={() => {
+                  setIsCustomerMenuOpen(!isCustomerMenuOpen);
+                  setIsAdminMenuOpen(false);
+                }}
+                className="flex items-center gap-1.5 text-sm font-medium whitespace-nowrap text-gray hover:text-primary transition-colors"
+              >
+                <UserIcon className="w-4 h-4" />
+                Customer
+              </button>
+              
+              <AnimatePresence>
+                {isCustomerMenuOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute right-0 top-full mt-2 w-48 bg-surface border border-white/10 rounded-xl shadow-2xl py-2 overflow-hidden z-50"
+                  >
+                    {customer ? (
+                      <Link 
+                        to="/customer/dashboard"
+                        className="block px-4 py-2 text-sm text-gray hover:bg-white/5 hover:text-primary transition-colors"
+                      >
+                        My Dashboard
+                      </Link>
+                    ) : (
+                      <>
+                        <Link 
+                          to="/customer/login"
+                          className="block px-4 py-2 text-sm text-gray hover:bg-white/5 hover:text-primary transition-colors"
+                        >
+                          <span className="flex items-center gap-2"><UserIcon className="w-4 h-4"/> Login</span>
+                        </Link>
+                        <Link 
+                          to="/customer/register"
+                          className="block px-4 py-2 text-sm text-gray hover:bg-white/5 hover:text-primary transition-colors"
+                        >
+                          <span className="flex items-center gap-2"><UserIcon className="w-4 h-4"/> Register</span>
+                        </Link>
+                      </>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
+
+            {/* Admin Portal Dropdown */}
+            <div className="relative group flex items-center h-10">
+              <button 
+                onClick={() => {
+                  setIsAdminMenuOpen(!isAdminMenuOpen);
+                  setIsCustomerMenuOpen(false);
+                }}
+                className="flex items-center gap-1.5 text-sm font-medium whitespace-nowrap text-gray hover:text-primary transition-colors"
+              >
+                <Shield className="w-4 h-4" />
+                Admin
+              </button>
+              
+              <AnimatePresence>
+                {isAdminMenuOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute right-0 top-full mt-2 w-48 bg-surface border border-white/10 rounded-xl shadow-2xl py-2 overflow-hidden z-50"
+                  >
+                    {user ? (
+                      <Link 
+                        to={`/${user.role}/dashboard`}
+                        className="block px-4 py-2 text-sm text-gray hover:bg-white/5 hover:text-primary transition-colors"
+                      >
+                        Go to Dashboard
+                      </Link>
+                    ) : (
+                      <>
+                        <Link 
+                          to="/admin/login"
+                          className="block px-4 py-2 text-sm text-gray hover:bg-white/5 hover:text-primary transition-colors"
+                        >
+                          <span className="flex items-center gap-2"><Shield className="w-4 h-4"/> Admin Login</span>
+                        </Link>
+                        <Link 
+                          to="/staff/login"
+                          className="block px-4 py-2 text-sm text-gray hover:bg-white/5 hover:text-primary transition-colors"
+                        >
+                          <span className="flex items-center gap-2"><UserIcon className="w-4 h-4"/> Staff Login</span>
+                        </Link>
+                      </>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <Link to="/book" className="flex items-center justify-center bg-primary text-black h-10 px-6 rounded-md text-sm font-bold hover:bg-yellow-500 transition-colors whitespace-nowrap shadow-lg hover:shadow-primary/20">
+              Book Service
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="lg:hidden">
+          <div className="lg:hidden flex items-center justify-end flex-1">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="text-white hover:text-primary transition-colors focus:outline-none"

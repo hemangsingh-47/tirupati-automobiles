@@ -37,3 +37,43 @@ export const deleteImage = async (imageUrl) => {
     // We do not throw an error here to prevent blocking standard operations if an image is just missing.
   }
 };
+
+export const uploadMedia = async (filePath) => {
+  try {
+    const isPdf = filePath.toLowerCase().endsWith('.pdf');
+    const result = await cloudinary.uploader.upload(filePath, {
+      folder: 'tirupati_automobiles/media',
+      use_filename: true,
+      resource_type: isPdf ? 'raw' : 'auto',
+    });
+    return result.secure_url;
+  } catch (error) {
+    throw new AppError('Failed to upload media to Cloudinary', 500);
+  }
+};
+
+export const deleteMedia = async (mediaUrl) => {
+  try {
+    if (!mediaUrl) return;
+    
+    const parts = mediaUrl.split('/');
+    const folderAndFile = parts.slice(parts.length - 3).join('/'); // e.g. tirupati_automobiles/media/sample.pdf
+    
+    let publicId;
+    let resourceType;
+
+    if (mediaUrl.includes('/raw/upload/')) {
+      // Raw files include the extension in their public_id
+      publicId = folderAndFile;
+      resourceType = 'raw';
+    } else {
+      // Images exclude the extension
+      publicId = folderAndFile.split('.')[0];
+      resourceType = 'image';
+    }
+    
+    await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
+  } catch (error) {
+    console.error('Cloudinary media deletion error:', error);
+  }
+};

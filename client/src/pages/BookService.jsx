@@ -299,14 +299,14 @@ const BookService = () => {
                         type="file" 
                         id="images" 
                         multiple 
-                        accept="image/*"
+                        accept="image/*,.jpg,.jpeg,.png,.webp,.heic"
                         className="hidden"
                         onChange={handleImageChange}
                       />
                       <label htmlFor="images" className="cursor-pointer flex flex-col items-center">
                         <Upload className="w-10 h-10 text-primary mb-3" />
                         <span className="text-white font-medium mb-1">Click to upload images</span>
-                        <span className="text-gray text-sm">PNG, JPG, WEBP or HEIC (Max 15MB each)</span>
+                        <span className="text-gray text-sm">PNG, JPG, JPEG, WEBP or HEIC (Max 15MB each)</span>
                       </label>
                     </div>
 

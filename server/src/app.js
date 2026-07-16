@@ -25,6 +25,7 @@ import faqRoutes from './routes/faqRoutes.js';
 import customerAuthRoutes from './routes/customerAuthRoutes.js';
 import customerBookingRoutes from './routes/customerBookingRoutes.js';
 import insuranceRoutes from './routes/insuranceRoutes.js';
+import mediaRoutes from './routes/mediaRoutes.js';
 
 dotenv.config();
 
@@ -85,6 +86,7 @@ app.use('/api/faqs', faqRoutes);
 app.use('/api/insurance', insuranceRoutes);
 app.use('/api/customers/auth', customerAuthRoutes);
 app.use('/api/customers/bookings', customerBookingRoutes);
+app.use('/api/media', mediaRoutes);
 
 app.get('/', (req, res) => {
   res.send('Tirupati Automobiles API is running...');

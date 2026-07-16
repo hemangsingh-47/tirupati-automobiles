@@ -18,6 +18,7 @@ import Home from '../pages/Home';
 const About = lazy(() => import('../pages/About'));
 const Services = lazy(() => import('../pages/Services'));
 const Gallery = lazy(() => import('../pages/Gallery'));
+const MediaCenter = lazy(() => import('../pages/MediaCenter'));
 const InsuranceClaim = lazy(() => import('../pages/InsuranceClaim'));
 const Contact = lazy(() => import('../pages/Contact'));
 const Faq = lazy(() => import('../pages/Faq'));
@@ -61,6 +62,7 @@ const ServicesManager = lazy(() => import('../pages/dashboard/cms/ServicesManage
 const TeamManager = lazy(() => import('../pages/dashboard/cms/TeamManager'));
 const FaqManager = lazy(() => import('../pages/dashboard/cms/FaqManager'));
 const SeoManager = lazy(() => import('../pages/dashboard/cms/SeoManager'));
+const MediaManager = lazy(() => import('../pages/dashboard/cms/MediaManager'));
 
 export const router = createBrowserRouter([
   {
@@ -76,6 +78,7 @@ export const router = createBrowserRouter([
       { path: 'about', element: <Suspense fallback={<PageLoader />}><About /></Suspense> },
       { path: 'services', element: <Suspense fallback={<PageLoader />}><Services /></Suspense> },
       { path: 'gallery', element: <Suspense fallback={<PageLoader />}><Gallery /></Suspense> },
+      { path: 'media', element: <Suspense fallback={<PageLoader />}><MediaCenter /></Suspense> },
       { path: 'insurance', element: <Suspense fallback={<PageLoader />}><InsuranceClaim /></Suspense> },
       { path: 'contact', element: <Suspense fallback={<PageLoader />}><Contact /></Suspense> },
       { path: 'book', element: <Suspense fallback={<PageLoader />}><BookService /></Suspense> },
@@ -142,6 +145,7 @@ export const router = createBrowserRouter([
       { path: 'cms/content', element: <Suspense fallback={<PageLoader />}><WebsiteContentManager /></Suspense> },
       { path: 'cms/services', element: <Suspense fallback={<PageLoader />}><ServicesManager /></Suspense> },
       { path: 'cms/team', element: <Suspense fallback={<PageLoader />}><TeamManager /></Suspense> },
+      { path: 'cms/media', element: <Suspense fallback={<PageLoader />}><MediaManager /></Suspense> },
       { path: 'cms/faq', element: <Suspense fallback={<PageLoader />}><FaqManager /></Suspense> },
       { path: 'cms/seo', element: <Suspense fallback={<PageLoader />}><SeoManager /></Suspense> },
     ]

@@ -17,7 +17,8 @@ import {
   HelpCircle,
   SearchCode,
   Shield,
-  Home
+  Home,
+  FolderOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -45,6 +46,7 @@ const DashboardLayout = () => {
     { name: 'CMS: Content', path: '/admin/cms/content', icon: FileText, roles: ['admin'] },
     { name: 'CMS: Services', path: '/admin/cms/services', icon: Wrench, roles: ['admin'] },
     { name: 'CMS: Team', path: '/admin/cms/team', icon: Users, roles: ['admin'] },
+    { name: 'CMS: Media Center', path: '/admin/cms/media', icon: FolderOpen, roles: ['admin'] },
     { name: 'CMS: FAQ', path: '/admin/cms/faq', icon: HelpCircle, roles: ['admin'] },
     { name: 'CMS: SEO', path: '/admin/cms/seo', icon: SearchCode, roles: ['admin'] },
   ];

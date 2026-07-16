@@ -22,15 +22,16 @@ const storage = multer.diskStorage({
 });
 
 function checkFileType(file, cb) {
-  if (file.mimetype.startsWith('image/')) {
+  if (file.mimetype.startsWith('image/') || file.mimetype === 'application/pdf') {
     return cb(null, true);
   } else {
-    cb(new AppError('Only image files are allowed!', 400));
+    cb(new AppError('Only image and PDF files are allowed!', 400));
   }
 }
 
 const upload = multer({
   storage,
+  limits: { fileSize: 20 * 1024 * 1024 }, // 20 MB max size
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   },
