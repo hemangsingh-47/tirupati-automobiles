@@ -56,7 +56,7 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center w-full gap-4 xl:gap-8">
+        <div className="flex justify-between items-center w-full gap-2 xl:gap-6">
           {/* Left: Logo & Brand */}
           <div className="flex items-center shrink-0">
             <Link to="/" className="flex items-center gap-2">
@@ -75,7 +75,7 @@ const Navbar = () => {
           </div>
 
           {/* Center: Navigation Links */}
-          <div className="hidden lg:flex flex-1 justify-center items-center gap-4 xl:gap-8 px-2">
+          <div className="hidden lg:flex flex-1 justify-center items-center gap-3 xl:gap-6 px-1">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
@@ -90,7 +90,7 @@ const Navbar = () => {
           </div>
             
           {/* Right: Actions */}
-          <div className="hidden lg:flex items-center justify-end gap-4 xl:gap-6 shrink-0">
+          <div className="hidden lg:flex items-center justify-end gap-3 xl:gap-5 shrink-0">
             {/* Customer Portal Dropdown */}
             <div className="relative group flex items-center h-10">
               <button 
@@ -189,7 +189,7 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
 
-            <Link to="/book" className="flex items-center justify-center bg-primary text-black h-10 px-6 rounded-md text-sm font-bold hover:bg-yellow-500 transition-colors whitespace-nowrap shadow-lg hover:shadow-primary/20">
+            <Link to="/book" className="flex items-center justify-center bg-primary text-black h-10 px-4 xl:px-6 rounded-md text-sm font-bold hover:bg-yellow-500 transition-colors whitespace-nowrap shadow-lg hover:shadow-primary/20">
               Book Service
             </Link>
           </div>
